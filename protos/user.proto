@@ -4,6 +4,7 @@ package user;
 
 service ProductService{
     rpc CreateProduct(ProductRequest) returns (Product);
+    rpc UpdateProduct(Product) returns (Product);
 }
 
 message Product{

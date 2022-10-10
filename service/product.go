@@ -34,3 +34,12 @@ func (s *ProductService) CreateProduct(ctx context.Context, req *pb.ProductReque
 	}
 	return product, nil
 }
+
+func (s *ProductService) UpdateProduct(ctx context.Context, req *pb.Product) (*pb.Product, error) {
+	product, err := s.storage.Product().UpdateProduct(req)
+	if err != nil {
+		s.logger.Error("error insert", l.Any("error while insert product", err))
+		return &pb.Product{}, status.Error(codes.Internal, "something went wrong, please check product update func")
+	}
+	return product, nil
+}

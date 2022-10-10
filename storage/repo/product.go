@@ -6,4 +6,5 @@ import (
 
 type ProductStorageI interface {
 	CreateProduct(*pb.ProductRequest) (*pb.Product, error)
+	UpdateProduct(*pb.Product) (*pb.Product, error)
 }

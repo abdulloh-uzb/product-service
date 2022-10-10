@@ -23,3 +23,22 @@ func (r *productRepo) CreateProduct(req *pb.ProductRequest) (*pb.Product, error)
 	}
 	return &productResp, nil
 }
+
+func (r *productRepo) UpdateProduct(req *pb.Product) (*pb.Product, error) {
+	productResp := pb.Product{}
+
+	err := r.db.QueryRow(`
+	insert into products (name, price, type, category) 
+	values($1,$2,$3,$4) 
+	where id = $5
+	returning id, name, price, type, category`,
+		req.Name, req.Price, req.TypeId, req.CategoryId, req.Id).
+		Scan(&productResp.Id, &productResp.Name, &productResp.Price, &productResp.TypeId, &productResp.CategoryId)
+
+	if err != nil {
+		return &pb.Product{}, err
+	}
+
+	return &productResp, nil
+
+}
