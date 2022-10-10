@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"fmt"
 	pb "product-service/genproto"
 
 	"github.com/jmoiron/sqlx"
@@ -31,10 +30,10 @@ func (r *productRepo) UpdateProduct(req *pb.Product) (*pb.Product, error) {
 	err := r.db.QueryRow(`
 	UPDATE products
 	SET name = $1, price = $2, type = $3, category = $4 
-	WHERE id = $5;`,
+	WHERE id = $5 
+	returning id, name, price, type, category`,
 		req.Name, req.Price, req.TypeId, req.CategoryId, req.Id).
 		Scan(&productResp.Id, &productResp.Name, &productResp.Price, &productResp.TypeId, &productResp.CategoryId)
-	fmt.Println(req.Id)
 	if err != nil {
 		return &pb.Product{}, err
 	}
